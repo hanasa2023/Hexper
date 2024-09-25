@@ -38,6 +38,18 @@ jobs:
           profile: minimal
           override: true
 
+      - name: Install required system libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev nsis lld llvm
+          echo "/usr/lib/x86_64-linux-gnu/pkgconfig" >> $GITHUB_ENV
+
+      - name: Add Rust target
+        run: cargo target add x86_64-pc-windows-msvc
+
+      - name: Install cargo-xwin
+        run: cargo install --locked cargo-xwin
+
       - name: Install Android SDK
         uses: android-actions/setup-android@v2
         with:
@@ -45,7 +57,7 @@ jobs:
           ndk-version: 21.4.7075529
 
       - name: Build Tauri application for desktop
-        run: tauri build
+        run: tauri build --runner cargo-xwin --target x86_64-pc-windows-msvc
 
       - name: Build Tauri application for Android
         run: tauri build --target android
