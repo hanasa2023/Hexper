@@ -49,8 +49,13 @@ jobs:
       - name: Set PKG_CONFIG_PATH
         run: echo "PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig" >> $GITHUB_ENV
 
-      - name: Add Rust target
-        run: ~/.cargo/bin/rustup target add x86_64-pc-windows-msvc
+      - name: Add Rust targets
+        run: |
+          ~/.cargo/bin/rustup target add x86_64-pc-windows-msvc
+          ~/.cargo/bin/rustup target add aarch64-linux-android
+          ~/.cargo/bin/rustup target add armv7-linux-androideabi
+          ~/.cargo/bin/rustup target add i686-linux-android
+          ~/.cargo/bin/rustup target add x86_64-linux-android
 
       - name: Install cargo-xwin
         run: cargo install --locked cargo-xwin
@@ -65,7 +70,7 @@ jobs:
         run: tauri build --runner cargo-xwin --target x86_64-pc-windows-msvc
 
       - name: Build Tauri application for Android
-        run: tauri build --target android
+        run: tauri build --target arrch64-linux-android
 
       - name: Sign APK
         run: |
