@@ -38,14 +38,19 @@ jobs:
           profile: minimal
           override: true
 
+      - name: Install rustup
+        run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+
       - name: Install required system libraries
         run: |
           sudo apt-get update
           sudo apt-get install -y libgtk-3-dev nsis lld llvm
-          echo "PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig" >> $GITHUB_ENV
+
+      - name: Set PKG_CONFIG_PATH
+        run: echo "PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig" >> $GITHUB_ENV
 
       - name: Add Rust target
-        run: cargo target add x86_64-pc-windows-msvc
+        run: ~/.cargo/bin/rustup target add x86_64-pc-windows-msvc
 
       - name: Install cargo-xwin
         run: cargo install --locked cargo-xwin
