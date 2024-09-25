@@ -82,6 +82,9 @@ jobs:
           echo "storeFile=$RUNNER_TEMP/keystore.jks" >> keystore.properties
 
       - name: Build Tauri application for Android
+        env:
+          OPENSSL_DIR: /usr/lib/x86_64-linux-gnu
+          OPENSSL_INCLUDE_DIR: /usr/include
         run: |
           export OPENSSL_INCLUDE_DIR=/usr/include
           export OPENSSL_DIR=/usr/lib/x86_64-linux-gnu
