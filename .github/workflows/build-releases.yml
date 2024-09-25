@@ -79,18 +79,18 @@ jobs:
       # 新增：为 Android 配置 OpenSSL 环境变量
       - name: Set environment variables for OpenSSL (Android)
         run: |
-          echo "OPENSSL_DIR=/usr/local/android-openssl" >> $GITHUB_ENV
-          echo "OPENSSL_INCLUDE_DIR=/usr/local/android-openssl/include" >> $GITHUB_ENV
-          echo "PKG_CONFIG_PATH=/usr/local/android-openssl/lib/pkgconfig" >> $GITHUB_ENV
+          echo "OPENSSL_DIR=/usr/lib/x86_64-linux-gnu" >> $GITHUB_ENV
+          echo "OPENSSL_INCLUDE_DIR=/usr/include" >> $GITHUB_ENV
+          echo "PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig" >> $GITHUB_ENV
 
       # Build Android 部分
       - name: Build Tauri application for Android
         env:
-          OPENSSL_DIR: /usr/local/android-openssl
-          OPENSSL_INCLUDE_DIR: /usr/local/android-openssl/include
+          OPENSSL_DIR: /usr/lib/x86_64-linux-gnu
+          OPENSSL_INCLUDE_DIR: /usr/include
         run: |
-          export OPENSSL_INCLUDE_DIR=/usr/local/android-openssl/include
-          export OPENSSL_DIR=/usr/local/android-openssl
+          export OPENSSL_INCLUDE_DIR=/usr/include
+          export OPENSSL_DIR=/usr/lib/x86_64-linux-gnu
           tauri build --target aarch64-linux-android
 
       # Build Windows 部分
