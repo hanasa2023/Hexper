@@ -14,7 +14,6 @@ jobs:
       KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
       KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       KEYSTORE_CONTENT: ${{ secrets.KEY_CONTENT }}
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -51,6 +50,9 @@ jobs:
           echo "OPENSSL_INCLUDE_DIR=/usr/include" >> $GITHUB_ENV
           echo "PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig" >> $GITHUB_ENV
 
+      - name: Set PKG_CONFIG_PATH
+        run: echo "PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig" >> $GITHUB_ENV
+
       - name: Add Rust targets
         run: |
           ~/.cargo/bin/rustup target add x86_64-pc-windows-msvc
@@ -78,7 +80,7 @@ jobs:
           cd src-tauri/gen/android
           echo "keyAlias=$KEY_ALIAS" > keystore.properties
           echo "password=$KEY_PASSWORD" >> keystore.properties
-          echo "$KEYSTORE_CONTENT" | base64 -d > $RUNNER_TEMP/keystore.jks
+          echo "$KEY_CONTENT" | base64 -d > $RUNNER_TEMP/keystore.jks
           echo "storeFile=$RUNNER_TEMP/keystore.jks" >> keystore.properties
 
       - name: Build Tauri application for Android
