@@ -101,7 +101,7 @@ jobs:
         with:
           artifacts: |
             src-tauri/target/release/bundle/**/*
-            src-tauri/target/android/release/app-release.apk
+          #   src-tauri/target/android/release/app-release.apk
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref }}
           name: 🔖 ${{ github.ref }}
