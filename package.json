@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/package",
   "name": "hexper",
   "private": true,
   "version": "0.1.2",

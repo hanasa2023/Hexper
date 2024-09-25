@@ -3,7 +3,7 @@ name: Build and Release Tauri Application
 on:
   push:
     tags:
-      - 'v*.*.*'
+      - 'v*.0.*'
   workflow_dispatch:
 
 jobs:
