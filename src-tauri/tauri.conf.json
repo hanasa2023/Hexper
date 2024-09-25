@@ -1,0 +1,41 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
+  "productName": "hexper",
+  "version": "0.1.0",
+  "identifier": "com.hexper.dev",
+  "build": {
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:1420",
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Hexper",
+        "width": 800,
+        "height": 600,
+        "resizable": true,
+        "fullscreen": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "android": {
+      "minSdkVersion": 24,
+      "versionCode": 1
+    },
+    "icon": [
+      "icons/48x48.png",
+      "icons/72x72.png",
+      "icons/144x144.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  }
+}

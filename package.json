@@ -1,0 +1,31 @@
+{
+  "name": "hexper",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "2.0.0-rc.5",
+    "chart.js": "^4.4.4",
+    "vite-plugin-vuetify": "^2.0.4",
+    "vue": "^3.5.8",
+    "vue-chartjs": "^5.3.1",
+    "vue-router": "^4.4.5",
+    "vuetify": "^3.7.2"
+  },
+  "devDependencies": {
+    "@mdi/font": "^7.4.47",
+    "@tauri-apps/cli": "2.0.0-rc.16",
+    "@vitejs/plugin-vue": "^5.0.5",
+    "sass": "^1.79.3",
+    "sass-loader": "^16.0.2",
+    "typescript": "^5.2.2",
+    "vite": "^5.3.1",
+    "vue-tsc": "^2.0.22"
+  }
+}

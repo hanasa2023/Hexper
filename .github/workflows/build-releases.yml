@@ -1,0 +1,77 @@
+name: Build and Release Tauri Application
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      KEYSTORE_PATH: ${{ secrets.KEYSTORE_PATH }}
+      KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+      KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+      KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Tauri CLI
+        run: npm install -g @tauri-apps/cli
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+
+      - name: Install Android SDK
+        uses: android-actions/setup-android@v2
+        with:
+          api-level: 30
+          ndk-version: 21.4.7075529
+
+      - name: Build Tauri application for desktop
+        run: tauri build
+
+      - name: Build Tauri application for Android
+        run: tauri build --target android
+
+      - name: Sign APK
+        run: |
+          jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore $KEYSTORE_PATH -storepass $KEYSTORE_PASSWORD -keypass $KEY_PASSWORD src-tauri/target/android/release/app-release-unsigned.apk $KEY_ALIAS
+
+      - name: Align APK
+        run: |
+          zipalign -v 4 src-tauri/target/android/release/app-release-unsigned.apk src-tauri/target/android/release/app-release.apk
+
+      - name: Verify APK
+        run: |
+          apksigner verify src-tauri/target/android/release/app-release.apk
+
+      - name: Upload artifacts to GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: |
+            src-tauri/target/release/bundle/**/*
+            src-tauri/target/android/release/app-release.apk
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref }}
+          name: Release ${{ github.ref }}
+          body: |
+            This is an automated release of the Tauri application.
+          draft: false
+          prerelease: false
