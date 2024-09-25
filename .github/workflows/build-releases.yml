@@ -27,6 +27,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Install OpenSSL development headers
+        run: sudo apt-get install -y libssl-dev pkg-config
+
       - name: Install Tauri CLI
         run: npm install -g @tauri-apps/cli@2.0.0-rc.16
 
@@ -43,7 +46,7 @@ jobs:
       - name: Install required system libraries
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgtk-3-dev nsis lld llvm libssl-dev pkg-config
+          sudo apt-get install -y libgtk-3-dev nsis lld llvm
 
       - name: Set environment variables for OpenSSL
         run: |
