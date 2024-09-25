@@ -13,7 +13,7 @@ jobs:
     env:
       KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
       KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-      KEY_BASE64: ${{ secrets.KEY_BASE64 }}
+      KEYSTORE_CONTENT: ${{ secrets.KEY_CONTENT }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -72,7 +72,7 @@ jobs:
           cd src-tauri/gen/android
           echo "keyAlias=$KEY_ALIAS" > keystore.properties
           echo "password=$KEY_PASSWORD" >> keystore.properties
-          base64 -d <<< "KEY_BASE64" > $RUNNER_TEMP/keystore.jks
+          echo "$KEY_CONTENT" | base64 -d > $RUNNER_TEMP/keystore.jks
           echo "storeFile=$RUNNER_TEMP/keystore.jks" >> keystore.properties
 
       - name: Build Tauri application for Android
