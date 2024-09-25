@@ -42,7 +42,10 @@ jobs:
       - name: Install required system libraries
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgtk-3-dev nsis lld llvm
+          sudo apt-get install -y libgtk-3-dev nsis lld llvm libssl-dev
+
+      - name: Set OPENSSL_DIR
+        run: echo "OPENSSL_DIR=/usr/lib/x86_64-linux-gnu" >> $GITHUB_ENV
 
       - name: Set PKG_CONFIG_PATH
         run: echo "PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig" >> $GITHUB_ENV
@@ -64,9 +67,6 @@ jobs:
           api-level: 30
           ndk-version: 21.4.7075529
 
-      - name: Build Tauri application for Android
-        run: tauri build --target aarch64-linux-android
-
       - name: Setup Android signing
         run: |
           cd src-tauri/gen/android
@@ -75,17 +75,8 @@ jobs:
           base64 -d <<< "KEY_BASE64" > $RUNNER_TEMP/keystore.jks
           echo "storeFile=$RUNNER_TEMP/keystore.jks" >> keystore.properties
 
-      - name: Sign APK
-        run: |
-          jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore $KEYSTORE_PATH -storepass $KEYSTORE_PASSWORD -keypass $KEY_PASSWORD src-tauri/target/android/release/app-release-unsigned.apk $KEY_ALIAS
-
-      - name: Align APK
-        run: |
-          zipalign -v 4 src-tauri/target/android/release/app-release-unsigned.apk src-tauri/target/android/release/app-release.apk
-
-      - name: Verify APK
-        run: |
-          apksigner verify src-tauri/target/android/release/app-release.apk
+      - name: Build Tauri application for Android
+        run: tauri build --target aarch64-linux-android
 
       - name: Build Tauri application for desktop
         run: tauri build --runner cargo-xwin --target x86_64-pc-windows-msvc
