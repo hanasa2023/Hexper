@@ -23,7 +23,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '22'
 
       - name: Install dependencies
         run: npm install
@@ -70,7 +70,7 @@ jobs:
             src-tauri/target/android/release/app-release.apk
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref }}
-          name: Release ${{ github.ref }}
+          name: 🔖 ${{ github.ref }}
           body: |
             This is an automated release of the Tauri application.
           draft: false
