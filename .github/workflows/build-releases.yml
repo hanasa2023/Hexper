@@ -11,11 +11,9 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      KEYSTORE_PATH: ${{ secrets.KEYSTORE_PATH }}
-      KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
       KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
       KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-
+      KEY_BASE64: ${{ secrets.KEY_BASE64 }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -66,11 +64,16 @@ jobs:
           api-level: 30
           ndk-version: 21.4.7075529
 
-      - name: Build Tauri application for desktop
-        run: tauri build --runner cargo-xwin --target x86_64-pc-windows-msvc
-
       - name: Build Tauri application for Android
-        run: tauri build --target arrch64-linux-android
+        run: tauri build --target aarch64-linux-android
+
+      - name: Setup Android signing
+        run: |
+          cd src-tauri/gen/android
+          echo "keyAlias=$KEY_ALIAS" > keystore.properties
+          echo "password=$KEY_PASSWORD" >> keystore.properties
+          base64 -d <<< "KEY_BASE64" > $RUNNER_TEMP/keystore.jks
+          echo "storeFile=$RUNNER_TEMP/keystore.jks" >> keystore.properties
 
       - name: Sign APK
         run: |
@@ -83,6 +86,9 @@ jobs:
       - name: Verify APK
         run: |
           apksigner verify src-tauri/target/android/release/app-release.apk
+
+      - name: Build Tauri application for desktop
+        run: tauri build --runner cargo-xwin --target x86_64-pc-windows-msvc
 
       - name: Upload artifacts to GitHub Release
         uses: ncipollo/release-action@v1
