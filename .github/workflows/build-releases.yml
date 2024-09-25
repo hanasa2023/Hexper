@@ -44,8 +44,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libgtk-3-dev nsis lld llvm libssl-dev
 
-      - name: Set OPENSSL_DIR
-        run: echo "OPENSSL_DIR=/usr/lib/x86_64-linux-gnu" >> $GITHUB_ENV
+      - name: Set environment variables for OpenSSL
+        run: |
+          echo "OPENSSL_DIR=/usr/lib/x86_64-linux-gnu" >> $GITHUB_ENV
+          echo "OPENSSL_INCLUDE_DIR=/usr/include" >> $GITHUB_ENV
+          echo "PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig" >> $GITHUB_ENV
 
       - name: Set PKG_CONFIG_PATH
         run: echo "PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig" >> $GITHUB_ENV
