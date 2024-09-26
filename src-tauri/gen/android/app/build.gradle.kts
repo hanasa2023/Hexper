@@ -58,7 +58,7 @@ android {
             //     *fileTree(".") { include("**/*.pro") }
             //         .plus(getDefaultProguardFile("proguard-android-optimize.txt"))
             //         .toList().toTypedArray()
-            )
+            //)
         }
     }
     kotlinOptions {

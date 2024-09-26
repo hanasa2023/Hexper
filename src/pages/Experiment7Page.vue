@@ -141,12 +141,14 @@ import {
   Point,
   ChartOptions,
   Colors,
+  LineController,
 } from 'chart.js'
 import { Chart } from 'vue-chartjs'
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
+  LineController,
   PointElement,
   LineElement,
   Title,
